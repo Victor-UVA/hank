@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+  <!-- open both js0 and js1 (this is because on the current computer, one is a LED controller and outputs nothing) -->
+  <node pkg="joy" name="joy_js0" type="joy_node" output="screen">
+  	<param name="dev" value="/dev/input/js0"/>
+  </node>
+  
+  <node pkg="joy" name="joy_js1" type="joy_node" output="screen">
+  	<param name="dev" value="/dev/input/js1"/>
+  </node>
+ 
+  <!-- converts joy_driving to cmd_vel -->
+  <node pkg="joytotwist" name="joytotwist" type="joytotwist_research_update" output="screen"/>
+  
+  <!-- <include file="$(find teleop_twist_joy)/launch/teleop.launch">
+     <remap from="/joy" to="/joy_driving"/>
+  </include> -->
+
+  <!-- the naming /dev/arduino is assigned in the udev rules /etc/udev/rules.d/99-dingohub.rules  -->
+
+
+<!-- Uncomment later -->
+  <node pkg="rosserial_python" name="rosserial_python" type="serial_node.py" ns="driving" output="screen">
+    <param name="port" value="/dev/ttyACM0"/>
+  </node>
+
+  <!-- the naming /dev/roboteq* is assigned in the udev rules /etc/udev/rules.d/99-dingohub.rules -->
+
+<!-- <include file="$(find roboteq_motor_controller_driver)/launch/driver.launch"/>
+  <include file="$(find roboteq_motor_controller_driver_2)/launch/driver.launch"/> -->
+
+  <node pkg="dingo_controller" name="dingo_controller" type="hank_controller" output="screen"/>
+
+  <!-- Launch clearpath steering-->
+   <!-- <node pkg="clearpath_steering" name="clearpath_steering" type="clearpath_steering_node" output="screen"/> -->
+  <node pkg="clearpath_steering" name="clearpath_steering" type="clearpath_steering_node" output="screen"/>
+
+
+</launch>

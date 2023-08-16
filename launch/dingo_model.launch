@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<launch>
+
+	<node pkg="tf2_ros" type="static_transform_publisher" name="dingbase_in_opti" args="0 0 0 0 0 1 0 Dingo base_link" />
+
+	<node pkg="tf2_ros" type="static_transform_publisher" name="Connect_base_broadcaster" args="0 0 0.1425 0 0 0 1 base_link Dingo_base_link" />
+	
+	<node pkg="tf2_ros" type="static_transform_publisher" name="dingobase_to_urbase" args="0.28 0 0 0 0 1 0 Dingo_base_link Dingo_UR/base_link" />
+
+	<node pkg="tf2_ros" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0 0 0 0 1 Dingo_base_link robot_footprint" />
+	
+
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+  		<param name="use_gui" value="false"/>
+  	</node>
+
+	  <!-- send urdf to param server - makes urdf from .xacro file-->
+	<param name="urdf" command="$(find xacro)/xacro --inorder '$(find dingo)/urdf/DINGO.xacro'" />
+	<!-- <param name="robot_description" command="$(find xacro)/xacro inorder '$(find dingo)/urdf/DINGO.xacro'"/> -->
+	
+	<!-- <node pkg="tf2_ros" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0 0 0 0 1 Dingo_base_link robot_footprint" /> -->
+	<!-- <node pkg="tf2_ros" type="static_transform_publisher" name="ftprnt_ro_chassis" args="0 0 0 0 0 0 1 robot_footprint chassis" /> -->
+
+	  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+        respawn="false" output="screen">  </node>
+
+	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find dingo)/urdf/DINGO.xacro'"/>
+
+</launch>
